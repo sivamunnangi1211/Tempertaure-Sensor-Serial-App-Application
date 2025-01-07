@@ -419,7 +419,7 @@ class Ui_MainWindow(object):
         # self.label_9.setText(_translate("MainWindow", "View as: "))
         self.label_10.setText(_translate("MainWindow", "Transmit Power"))
         self.label_11.setText(_translate("MainWindow", "Temperature Threshold"))
-        self.label_12.setText(_translate("MainWindow", "Transmit Pin Change"))
+        self.label_12.setText(_translate("MainWindow", "Transmit On Change"))
         self.label_13.setText(_translate("MainWindow", "Sleep Time"))
         self.label_14.setText(_translate("MainWindow", "Sensor Type"))
         self.label_15.setText(_translate("MainWindow", "Unique ID(UID)"))

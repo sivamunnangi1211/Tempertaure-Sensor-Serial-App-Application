@@ -83,7 +83,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         self.comboBox_7.addItems(["String","Hex","Chart"])
         self.comboBox_8.addItems(["Yes","No"])
         self.comboBox_9.addItems([""])  # sleep time dropdown
-        self.comboBox_10.addItems([""])      #sensor type
+        self.comboBox_10.addItems(["RTD","TC-K type","TC-J type","TC-N type","TC-T type","TC-S type","TC-R type","TC-E type"])      #sensor type
         self.comboBox_11.addItems([str(i) for i in range(1, 1001)])
         self.comboBox_12.addItems([str(i) for i in range(1, 1001)])
         self.comboBox_13.addItems([str(i) for i in range(1, 22)])
@@ -125,6 +125,11 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         self.pushButton_command.setText("Get Params")
         self.device_id = None
         self.version = None
+
+        # Connect combo boxes to the conversion function  
+        self.comboBox_11.currentIndexChanged.connect(self.convert_to_hex)  
+        self.comboBox_12.currentIndexChanged.connect(self.convert_to_hex)
+        self.comboBox_19.currentIndexChanged.connect(self.convert_to_hex)
         
         # Combine the styles into a single setStyleSheet call
         self.pushButton_command.setStyleSheet("""
@@ -139,6 +144,25 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         """)
         
         self.pushButton_command.clicked.connect(self.set_default_values_and_send_command)
+
+    def convert_to_hex(self):  
+        # Get the selected values from the combo boxes  
+        value_11 = self.comboBox_11.currentText()  
+        value_12 = self.comboBox_12.currentText()  
+        value_19 = self.comboBox_19.currentText()  
+
+        # Convert to hex if the values are not empty  
+        if value_11.isdigit():  
+            hex_value_11 = hex(int(value_11))[2:].upper().zfill(4)  # Convert to hex, remove '0x', and pad to 4 digits  
+            print(f"Hex Value 11: {hex_value_11}")  # Print to terminal  
+
+        if value_12.isdigit():  
+            hex_value_12 = hex(int(value_12))[2:].upper().zfill(4)  # Convert to hex, remove '0x', and pad to 4 digits  
+            print(f"Hex Value 12: {hex_value_12}")  # Print to terminal  
+
+        if value_19.isdigit():  
+            hex_value_19 = hex(int(value_19))[2:].upper().zfill(4)  # Convert to hex, remove '0x', and pad to 4 digits  
+            print(f"Hex Value 19: {hex_value_19}")  # Print to terminal  
 
     def set_default_values_and_send_command(self):
         print("Setting default values and sending command")
@@ -270,7 +294,6 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
             self.output_format = "hex"
         elif selected_index == 2:
             self.output_format = "chart"
-
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
