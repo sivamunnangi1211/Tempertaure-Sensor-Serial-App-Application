@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
             font-weight: bold;           /* Font weight */
         """
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(30, 280, 81, 21)) #baud rate
+        self.label_2.setGeometry(QtCore.QRect(30, 280, 131, 21)) #Network Id(NID)
         self.label_2.setObjectName("label_2")
         self.label_2.setStyleSheet(common_style)
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
@@ -60,39 +60,39 @@ class Ui_MainWindow(object):
         self.label_9.setObjectName("label_9")
         self.label_9.setStyleSheet(common_style)
         self.label_10 = QtWidgets.QLabel(self.centralwidget)
-        self.label_10.setGeometry(QtCore.QRect(360, 360, 120, 21))  # fixed transmission
+        self.label_10.setGeometry(QtCore.QRect(380, 360, 120, 21))  #Transmit Power
         self.label_10.setObjectName("label_10")
         self.label_10.setStyleSheet(common_style)
         self.label_11 = QtWidgets.QLabel(self.centralwidget)
-        self.label_11.setGeometry(QtCore.QRect(360, 520, 87, 21))  #io drive mode
+        self.label_11.setGeometry(QtCore.QRect(380, 520, 177, 21)) #Temperature Threshold
         self.label_11.setObjectName("label_11")
         self.label_11.setStyleSheet(common_style)
         self.label_12= QtWidgets.QLabel(self.centralwidget)
-        self.label_12.setGeometry(QtCore.QRect(360, 440, 157, 21))  #wireless wake up time
+        self.label_12.setGeometry(QtCore.QRect(380, 440, 157, 21))  #Transmit On Change
         self.label_12.setObjectName("label_12")
         self.label_12.setStyleSheet(common_style)
         self.label_13 = QtWidgets.QLabel(self.centralwidget)
-        self.label_13.setGeometry(QtCore.QRect(360, 280, 87, 21))  #fec switch
+        self.label_13.setGeometry(QtCore.QRect(380, 280, 87, 21))  #Sleep Time
         self.label_13.setObjectName("label_13")
         self.label_13.setStyleSheet(common_style)
         self.label_14 = QtWidgets.QLabel(self.centralwidget)
-        self.label_14.setGeometry(QtCore.QRect(30, 520, 127, 21))  #transmission power
+        self.label_14.setGeometry(QtCore.QRect(760, 440, 127, 21))  #Sensor Type
         self.label_14.setObjectName("label_14")
         self.label_14.setStyleSheet(common_style)
         self.label_15 = QtWidgets.QLabel(self.centralwidget)
-        self.label_15.setGeometry(QtCore.QRect(30, 360, 117, 21))  #UART parity bit
+        self.label_15.setGeometry(QtCore.QRect(30, 360, 117, 21))  #Unique Id(UID)
         self.label_15.setObjectName("label_15")
         self.label_15.setStyleSheet(common_style)
         self.label_16 = QtWidgets.QLabel(self.centralwidget)
-        self.label_16.setGeometry(QtCore.QRect(30, 440, 107, 21))  #Air data rate
+        self.label_16.setGeometry(QtCore.QRect(30, 440, 151, 21))  #Destination Id(DID)
         self.label_16.setObjectName("label_16")
         self.label_16.setStyleSheet(common_style)
         self.label_18 = QtWidgets.QLabel(self.centralwidget)
-        self.label_18.setGeometry(QtCore.QRect(690, 360, 107, 21))  #Address
+        self.label_18.setGeometry(QtCore.QRect(760, 360, 107, 21))  #No Of Wires
         self.label_18.setObjectName("label_18")
         self.label_18.setStyleSheet(common_style)
         self.label_20 = QtWidgets.QLabel(self.centralwidget)
-        self.label_20.setGeometry(QtCore.QRect(690, 280, 87, 21))  #Frame
+        self.label_20.setGeometry(QtCore.QRect(760, 280, 87, 21))  #PT type
         self.label_20.setObjectName("label_20")
         self.label_20.setStyleSheet(common_style)
 
@@ -226,41 +226,41 @@ class Ui_MainWindow(object):
         self.comboBox_7.setObjectName("comboBox_7")
         self.comboBox_7.setStyleSheet(common_combobox_style)
         self.comboBox_8 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_8.setGeometry(QtCore.QRect(470, 430, 150, 32))   #250ms values dropdown
+        self.comboBox_8.setGeometry(QtCore.QRect(570, 430, 150, 32))   #Transmit On change Dropdown
         self.comboBox_8.setObjectName("comboBox_8")
         # self.infoButton_8 = self.create_info_button(630, 430, "infoButton_8", common_button_style)
         self.comboBox_8.setStyleSheet(common_combobox_style)
         self.lineEdit_9 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_9.setGeometry(QtCore.QRect(470, 270, 150, 32))  # FEC text box
+        self.lineEdit_9.setGeometry(QtCore.QRect(570, 270, 150, 32))  # sleep time dropdown
         self.lineEdit_9.setObjectName("lineEdit_9")
         self.lineEdit_9.setStyleSheet(common_lineedit_style)
-        self.infoButton_9 = self.create_info_button(630, 270, "infoButton_9", common_button_style)
+        # self.infoButton_9 = self.create_info_button(720, 270, "infoButton_9", common_button_style)
         # self.comboBox_9.setStyleSheet(common_combobox_style)
         self.comboBox_10 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_10.setGeometry(QtCore.QRect(130, 510, 150, 32))    #20dBm dropdown
+        self.comboBox_10.setGeometry(QtCore.QRect(870, 430, 150, 32))    #Sensor Type
         self.comboBox_10.setObjectName("comboBox_10")
         # self.infoButton_10 = self.create_info_button(290, 510, "infoButton_10", common_button_style)
         self.comboBox_10.setStyleSheet(common_combobox_style)
         self.comboBox_11 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_11.setGeometry(QtCore.QRect(130, 430, 150, 32))    #0.3k values dropdown
+        self.comboBox_11.setGeometry(QtCore.QRect(190, 430, 150, 32))    #Destination Id(DID)
         self.comboBox_11.setObjectName("comboBox_11")
         self.comboBox_11.setEditable(True)
-        self.infoButton_11 = self.create_info_button(290, 430, "infoButton_11", common_button_style)
+        # self.infoButton_11 = self.create_info_button(290, 430, "infoButton_11", common_button_style)
         self.comboBox_11.setStyleSheet(common_combobox_style)
         self.comboBox_12 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_12.setGeometry(QtCore.QRect(130, 350, 150, 32))    #8N1 dropdown
+        self.comboBox_12.setGeometry(QtCore.QRect(190, 350, 150, 32))    #Unique Id(UID)
         self.comboBox_12.setObjectName("comboBox_12")
         self.comboBox_12.setEditable(True)
         # self.infoButton_12 = self.create_info_button(290, 350, "infoButton_12", common_button_style)
         self.comboBox_12.setStyleSheet(common_combobox_style)
         self.comboBox_13 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_13.setGeometry(QtCore.QRect(470, 350, 150, 32))    #Transmit Power dropdown
+        self.comboBox_13.setGeometry(QtCore.QRect(570, 350, 150, 32))    #Transmit Power dropdown
         self.comboBox_13.setObjectName("comboBox_13")
-        self.infoButton_13 = self.create_info_button(630, 350, "infoButton_13", common_button_style) 
+        # self.infoButton_13 = self.create_info_button(720, 350, "infoButton_13", common_button_style) 
         self.comboBox_13.setStyleSheet(common_combobox_style)
         # Replace QComboBox with QLineEdit
         self.lineEdit_14 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_14.setGeometry(QtCore.QRect(470, 510, 150, 32))  # Temperature Text Box
+        self.lineEdit_14.setGeometry(QtCore.QRect(570, 510, 150, 32))  # Temperature Text Box
         self.lineEdit_14.setObjectName("lineEdit_14")
         self.lineEdit_14.setStyleSheet(common_lineedit_style)  # Apply the previously defined QLineEdit style
         validator = QDoubleValidator()
@@ -268,19 +268,19 @@ class Ui_MainWindow(object):
         validator.setDecimals(2)  # Limit to 2 decimal places
         validator.setBottom(0.0)  # Set minimum value (e.g., 0.0)
         self.lineEdit_14.setValidator(validator)
-        self.infoButton_14 = self.create_info_button(630, 510, "infoButton_14", common_button_style)
+        # self.infoButton_14 = self.create_info_button(720, 510, "infoButton_14", common_button_style)
         self.comboBox_15 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_15.setGeometry(QtCore.QRect(770, 350, 150, 32))   #No of Wires Dropdown
+        self.comboBox_15.setGeometry(QtCore.QRect(870, 350, 150, 32))   #No of Wires Dropdown
         self.comboBox_15.setObjectName("comboBox_15")
-        self.infoButton_15 = self.create_info_button(930, 350, "infoButton_15", common_button_style)
+        # self.infoButton_15 = self.create_info_button(1030, 350, "infoButton_15", common_button_style)
         self.comboBox_15.setStyleSheet(common_combobox_style)
         self.comboBox_18 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_18.setGeometry(QtCore.QRect(770,270,150,32))   #PT Dropdown
+        self.comboBox_18.setGeometry(QtCore.QRect(870,270,150,32))   #PT Dropdown
         self.comboBox_18.setObjectName("comboBox_18")
         # self.infoButton_18 = self.create_info_button(930, 270, "infoButton_18", common_button_style)
         self.comboBox_18.setStyleSheet(common_combobox_style)
         self.comboBox_19 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_19.setGeometry(QtCore.QRect(130, 270, 150, 32))   # baud rate 
+        self.comboBox_19.setGeometry(QtCore.QRect(190, 270, 150, 32))   #Network Id(NID)
         self.comboBox_19.setObjectName("comboBox_19")
         self.comboBox_19.setEditable(True)
         # self.infoButton_19 = self.create_info_button(290, 270, "infoButton_19", common_button_style)

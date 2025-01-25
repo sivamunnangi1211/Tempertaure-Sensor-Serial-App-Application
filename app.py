@@ -9,7 +9,21 @@ from PyQt5.QtGui import QFont, QColor
 from PyQt5.QtCore import QTimer  
 import time,base64
 from convertionlogic import SerialMonitorApp
-import struct
+import struct, logging, os
+
+# Create logs directory  
+log_dir = 'logs'  
+if not os.path.exists(log_dir):  
+    os.makedirs(log_dir)  
+
+# Configure logging  
+logging.basicConfig(  
+    filename=os.path.join(log_dir, 'app.log'),  # Log file path  
+    level=logging.DEBUG,  
+    format='%(asctime)s - %(levelname)s - %(message)s'  
+)  
+
+logging.info('Application started') 
 class SerialMonitorApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -87,7 +101,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         if self.serial_port and self.serial_port.is_open:  
             self.serial_port.close()  
             self.serial_port = None  
-            print("Serial port disconnected.")
+            logging.info("Serial port disconnected.")
             
     def setup_checkboxes(self):
         self.checkBox.stateChanged.connect(self.on_carriage_return_changed)
@@ -129,7 +143,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         self.pushButton_command.clicked.connect(self.set_default_values_and_send_command)
 
     def set_default_values_and_send_command(self):
-        print("Setting default values and sending command")
+        logging.info("Setting default values and sending command")
         self.comboBox_3.setCurrentText("Hex")
         self.comboBox_4.setCurrentText("8")
         self.comboBox_5.setCurrentText("No Parity")
@@ -152,11 +166,11 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         self.checkBox_2.setEnabled(False)
 
     def on_carriage_return_changed(self, state):
-        print("Carriage return changed:", state)
+        logging.info("Carriage return changed:", state)
         self.append_r = state == QtCore.Qt.Checked
 
     def on_new_line_changed(self, state):
-        print("New line changed:", state)
+        logging.info("New line changed:", state)
         self.append_n = state == QtCore.Qt.Checked
 
     def update_baud_rates(self): #function to select baud rates
@@ -165,7 +179,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
     def disconnect_serial(self):  
         """Disconnects the serial port and updates the UI."""  
-        print("Disconnecting serial port")  
+        logging.info("Disconnecting serial port")  
         if self.serial_port and self.serial_port.is_open:  
             self.serial_port.close()  
             self.serial_port = None  
@@ -176,19 +190,19 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
     
     def update_ports(self):  
         """Updates the list of available COM ports in the combo box."""  
-        print("Updating ports")  
+        logging.info("Updating ports")  
         self.comboBox.clear()  
         ports = serial.tools.list_ports.comports()  
         if ports:  
             self.comboBox.addItems([f"{port.device} - {port.description}" for port in ports])  
-            print(f"Available ports: {[port.device for port in ports]}")  
+            logging.info(f"Available ports: {[port.device for port in ports]}")  
         else:  
             self.comboBox.addItem("No ports available")  
-            print("No COM ports found.")  
+            logging.info("No COM ports found.")  
 
     def connect_serial(self):  
         """Connects to the selected serial port with specified parameters."""  
-        print("Connecting to serial port")  
+        logging.info("Connecting to serial port")  
         if self.serial_port and self.serial_port.is_open:  
             self.serial_port.close()  
             self.serial_port = None  
@@ -213,17 +227,17 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
                 )  
                 self.textEdit_2.clear()  
                 self.textEdit_2.append(f"Connected to {selected_port_info} at {selected_baud} baud.")  
-                print(f"Successfully connected to {selected_port}.")  
+                logging.info(f"Successfully connected to {selected_port}.")  
             else:  
                 raise ValueError("Invalid port format.")  
         except serial.SerialException as e:  
             self.textEdit_2.clear()  
             self.textEdit_2.append(f"Serial error: {str(e)}")  
-            print(f"Serial error: {str(e)}")  
+            logging.info(f"Serial error: {str(e)}")  
         except Exception as e:  
             self.textEdit_2.clear()  
             self.textEdit_2.append(f"Error: {str(e)}")  
-            print(f"Error: {str(e)}")  
+            logging.info(f"Error: {str(e)}")  
 
     def handle_push_button_click(self):  
         # First, call the method to set default values and send the command  
@@ -233,31 +247,31 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
     def refresh_ports(self):  
         """Refreshes the list of available COM ports."""  
-        print("Refreshing ports")  
+        logging.info("Refreshing ports")  
         self.update_ports()  
 
     def clear_response(self):
-        print("Clearing response text edit")
+        logging.info("Clearing response text edit")
         self.textEdit_2.clear()
 
     def change_format_mode(self):
         selected_index = self.comboBox_3.currentIndex()
-        print("Changing format mode to:", self.comboBox_3.currentText())
+        logging.info("Changing format mode to:", self.comboBox_3.currentText())
         self.format_mode = "string" if selected_index == 0 else "hex"
 
     def get_selected_data_bits(self):
         selected_data_bits = self.data_bits_mapping[self.comboBox_4.currentText()]
-        print("Selected data bits:", selected_data_bits)
+        logging.info("Selected data bits:", selected_data_bits)
         return selected_data_bits
 
     def get_selected_stop_bits(self):
         selected_stop_bits = self.stop_bits_mapping[self.comboBox_6.currentText()]
-        print("Selected stop bits:", selected_stop_bits)
+        logging.info("Selected stop bits:", selected_stop_bits)
         return selected_stop_bits
 
     def change_output_format(self):
         selected_index = self.comboBox_7.currentIndex()
-        print("Changing output format to:", self.comboBox_7.currentText())
+        logging.info("Changing output format to:", self.comboBox_7.currentText())
         if selected_index == 0:
             self.output_format = "string"
         elif selected_index == 1:
@@ -287,12 +301,12 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
                 # Write the command to the serial port
                 self.serial_port.write(command_bytes)
-                print(f"Sent {command_name}: {command_bytes.hex()}")
+                logging.info(f"Sent {command_name}: {command_bytes.hex()}")
                 time.sleep(0.1)
 
                 # Read the response from the serial port
                 response = self.serial_port.read_all()
-                print(f"Raw response from {command_name}: {response.hex()}")
+                logging.info(f"Raw response from {command_name}: {response.hex()}")
 
                 if response:
                     # Format the response based on output format
@@ -314,8 +328,8 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
                 # Clear the textEdit_2 widget before appending the new response  
                 self.textEdit_2.clear()  
                 self.textEdit_2.append(f"Received params: {response_text}")
-                print("response text",response_text)
-                print(f"Checking alert condition:response_text={response_text.strip()}")    
+                logging.info("response text",response_text)
+                logging.info(f"Checking alert condition:response_text={response_text.strip()}")    
                 if len(response) >= 7: 
                     value_1 = int.from_bytes(response[0:2], byteorder='big')  
                     self.comboBox_19.setCurrentText(str(value_1))  
@@ -328,9 +342,9 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
                     if len(response) >= 7:
                         byte_4 = response[6] 
-                        print("byte 4",byte_4)
+                        logging.info("byte 4",byte_4)
                         binary_value = format(byte_4, '08b') 
-                        print(f"Binary value of byte 23: {binary_value}")  
+                        logging.info(f"Binary value of byte 23: {binary_value}")  
 
                         sensor_type_bits = binary_value[2:5]  
                         if sensor_type_bits == "000":  
@@ -367,19 +381,19 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
                 if len(response) >= 8: 
                     byte_8 = response[7] 
                     binary_byte_8 = format(byte_8, '08b')
-                    print(f"Binary value of the 8th byte: {binary_byte_8}")
+                    logging.info(f"Binary value of the 8th byte: {binary_byte_8}")
 
                     bits_2_6 = binary_byte_8[2:7]  
                     decimal_value = int(bits_2_6, 2) 
                     self.comboBox_13.setCurrentText(str(decimal_value))  
-                    print(f"Bits 2-6 of the 8th byte: {bits_2_6}, updated comboBox_13 to {decimal_value}")  
+                    logging.info(f"Bits 2-6 of the 8th byte: {bits_2_6}, updated comboBox_13 to {decimal_value}")  
  
                     last_bit = binary_byte_8[-1]
                     if last_bit == '0':  
                         self.comboBox_8.setCurrentText("No")  
                     elif last_bit == '1':  
                         self.comboBox_8.setCurrentText("Yes")  
-                    print(f"Last bit of the 8th byte: {last_bit}, updated comboBox_8 to {'Yes' if last_bit == '1' else 'No'}")  
+                    logging.info(f"Last bit of the 8th byte: {last_bit}, updated comboBox_8 to {'Yes' if last_bit == '1' else 'No'}")  
 
                 if len(response) >= 12:  
                     byte_9 = response[8] 
@@ -389,7 +403,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
                     decimal_value_9_12 = (byte_9 << 24) + (byte_10 << 16) + (byte_11 << 8) + byte_12  
                     self.lineEdit_9.setText(str(decimal_value_9_12)) 
-                    print(f"9th byte: {byte_9}, 10th byte: {byte_10}, 11th byte: {byte_11}, 12th byte: {byte_12}, combined decimal value: {decimal_value_9_12}")
+                    logging.info(f"9th byte: {byte_9}, 10th byte: {byte_10}, 11th byte: {byte_11}, 12th byte: {byte_12}, combined decimal value: {decimal_value_9_12}")
 
                 if len(response) >= 16:  
                     byte_13 = response[12] 
@@ -404,14 +418,14 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
                     formatted_float_value = f"{float_value:.2f}"  
                     self.lineEdit_14.setText(formatted_float_value) 
-                    print(f"13th byte: {byte_13}, 14th byte: {byte_14}, 15th byte: {byte_15}, 16th byte: {byte_16}, float value: {formatted_float_value}")  
+                    logging.info(f"13th byte: {byte_13}, 14th byte: {byte_14}, 15th byte: {byte_15}, 16th byte: {byte_16}, float value: {formatted_float_value}")  
         else:
             # Clear textEdit_2 and display connection error
             self.textEdit_2.clear()
             self.textEdit_2.append("Not connected to a serial port.")
 
     def convert_values(self):
-        print("Converting values")
+        logging.info("Converting values")
         
         # Check if all fields are filled
         if (self.comboBox_19.currentText() == "" or
@@ -490,9 +504,9 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
             first_half_hex = first_half_hex.zfill(1)  
             second_half_hex = second_half_hex.zfill(1)  
             new_command = first_half_hex + second_half_hex
-            print(first_half_hex, second_half_hex)
+            logging.info(first_half_hex, second_half_hex)
         else:  
-            print("Command must be 8 bits long.")  
+            logging.info("Command must be 8 bits long.")  
 
         if selected_combo_13.isdigit():
             combo_13_value = int(selected_combo_13)
@@ -571,7 +585,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
         # Reformat as a space-separated string
         combined_command = " ".join(command_bytes)
-        print(f"Combined Command (17 bytes): {combined_command}")
+        logging.info(f"Combined Command (17 bytes): {combined_command}")
         self.textEdit_2.clear()
         self.textEdit_2.append(f"Params: {combined_command}")
 
@@ -579,12 +593,12 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
             try:
                 command_bytes = bytes.fromhex(combined_command.replace(' ', ''))
                 self.serial_port.write(command_bytes)
-                print(f"Sent command: {command_bytes.hex()}")
+                logging.info(f"Sent command: {command_bytes.hex()}")
             except Exception as e:
-                print(f"Error sending command: {str(e)}")
+                logging.info(f"Error sending command: {str(e)}")
                 self.textEdit_2.append(f"Error sending command: {str(e)}")
         else:
-            print("Serial port not open, unable to send command")
+            logging.info("Serial port not open, unable to send command")
             self.textEdit_2.append("Serial port not open, unable to send command")
 
 if __name__ == '__main__':

@@ -1,0 +1,54 @@
+2025-01-25 12:10:34,574 - INFO - Application started
+2025-01-25 12:10:35,293 - INFO - Updating ports
+2025-01-25 12:10:35,305 - INFO - Available ports: ['COM3']
+2025-01-25 12:10:35,305 - INFO - Updating ports
+2025-01-25 12:10:35,310 - INFO - Available ports: ['COM3']
+2025-01-25 12:10:37,888 - INFO - Setting default values and sending command
+2025-01-25 12:10:37,888 - INFO - Connecting to serial port
+2025-01-25 12:10:37,888 - INFO - Serial error: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2025-01-25 12:10:40,590 - INFO - Disconnecting serial port
+2025-01-25 12:10:42,683 - INFO - Setting default values and sending command
+2025-01-25 12:10:42,683 - INFO - Connecting to serial port
+2025-01-25 12:10:42,685 - INFO - Serial error: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2025-01-25 12:10:47,011 - INFO - Setting default values and sending command
+2025-01-25 12:10:47,011 - INFO - Connecting to serial port
+2025-01-25 12:10:47,011 - INFO - Serial error: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2025-01-25 12:10:55,984 - INFO - Setting default values and sending command
+2025-01-25 12:10:55,984 - INFO - Connecting to serial port
+2025-01-25 12:10:56,032 - INFO - Successfully connected to COM3.
+2025-01-25 12:10:57,541 - INFO - Setting default values and sending command
+2025-01-25 12:10:57,541 - INFO - Sent Data Command: a1a1a1
+2025-01-25 12:10:57,644 - INFO - Raw response from Data Command: 030900de014d2411000055f0295c0642be
+2025-01-25 12:10:57,644 - INFO - Checking alert condition:response_text=03 09 00 DE 01 4D 24 11 00 00 55 F0 29 5C 06 42 BE
+2025-01-25 12:10:57,644 - INFO - Binary value of byte 23: 00100100
+2025-01-25 12:10:57,644 - INFO - Binary value of the 8th byte: 00010001
+2025-01-25 12:10:57,644 - INFO - Bits 2-6 of the 8th byte: 01000, updated comboBox_13 to 8
+2025-01-25 12:10:57,644 - INFO - Last bit of the 8th byte: 1, updated comboBox_8 to Yes
+2025-01-25 12:10:57,644 - INFO - 9th byte: 0, 10th byte: 0, 11th byte: 85, 12th byte: 240, combined decimal value: 22000
+2025-01-25 12:10:57,644 - INFO - 13th byte: 41, 14th byte: 92, 15th byte: 6, 16th byte: 66, float value: 33.59
+2025-01-25 12:11:27,455 - INFO - Refreshing ports
+2025-01-25 12:11:27,455 - INFO - Updating ports
+2025-01-25 12:11:27,467 - INFO - Available ports: ['COM3']
+2025-01-25 12:11:29,954 - INFO - Clearing response text edit
+2025-01-25 12:11:31,487 - INFO - Setting default values and sending command
+2025-01-25 12:11:31,489 - INFO - Sent Data Command: a1a1a1
+2025-01-25 12:11:31,590 - INFO - Raw response from Data Command: 030900de014d2411000055f0295c0642be
+2025-01-25 12:11:31,591 - INFO - Checking alert condition:response_text=03 09 00 DE 01 4D 24 11 00 00 55 F0 29 5C 06 42 BE
+2025-01-25 12:11:31,591 - INFO - Binary value of byte 23: 00100100
+2025-01-25 12:11:31,592 - INFO - Binary value of the 8th byte: 00010001
+2025-01-25 12:11:31,592 - INFO - Bits 2-6 of the 8th byte: 01000, updated comboBox_13 to 8
+2025-01-25 12:11:31,592 - INFO - Last bit of the 8th byte: 1, updated comboBox_8 to Yes
+2025-01-25 12:11:31,592 - INFO - 9th byte: 0, 10th byte: 0, 11th byte: 85, 12th byte: 240, combined decimal value: 22000
+2025-01-25 12:11:31,592 - INFO - 13th byte: 41, 14th byte: 92, 15th byte: 6, 16th byte: 66, float value: 33.59
+2025-01-25 12:11:31,592 - INFO - Connecting to serial port
+2025-01-25 12:11:31,657 - INFO - Successfully connected to COM3.
+2025-01-25 12:11:33,306 - INFO - Setting default values and sending command
+2025-01-25 12:11:33,307 - INFO - Sent Data Command: a1a1a1
+2025-01-25 12:11:33,408 - INFO - Raw response from Data Command: 030900de014d2411000055f0295c0642be
+2025-01-25 12:11:33,409 - INFO - Checking alert condition:response_text=03 09 00 DE 01 4D 24 11 00 00 55 F0 29 5C 06 42 BE
+2025-01-25 12:11:33,409 - INFO - Binary value of byte 23: 00100100
+2025-01-25 12:11:33,409 - INFO - Binary value of the 8th byte: 00010001
+2025-01-25 12:11:33,410 - INFO - Bits 2-6 of the 8th byte: 01000, updated comboBox_13 to 8
+2025-01-25 12:11:33,410 - INFO - Last bit of the 8th byte: 1, updated comboBox_8 to Yes
+2025-01-25 12:11:33,410 - INFO - 9th byte: 0, 10th byte: 0, 11th byte: 85, 12th byte: 240, combined decimal value: 22000
+2025-01-25 12:11:33,410 - INFO - 13th byte: 41, 14th byte: 92, 15th byte: 6, 16th byte: 66, float value: 33.59
