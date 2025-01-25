@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout, QPushButton, QLineEdit
 from PyQt5.QtGui import QFont, QColor
 from PyQt5.QtCore import QTimer  
 import time,base64
-
+from convertionlogic import SerialMonitorApp
+import struct
 class SerialMonitorApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -29,23 +30,21 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         }
 
         # Connect the push buttons using clicked.connect
-        self.pushButton.clicked.connect(self.connect_serial)
+        self.pushButton.clicked.connect(self.handle_push_button_click)
         self.pushButton_2.clicked.connect(self.refresh_ports)
         self.pushButton_3.clicked.connect(self.clear_response)
         self.pushButton_4.clicked.connect(self.disconnect_serial)
-        # self.pushButton_5.clicked.connect(self.submit_command)
-        # self.pushButton_6.clicked.connect(self.send_version_command)
+        self.pushButton_5.clicked.connect(self.convert_values)
+        self.pushButton_6.clicked.connect(self.send_command)
         # self.pushButton_7.clicked.connect(self.show_popup)
 
         self.setup_combo_boxes()
         self.setup_checkboxes()
         self.setup_additional_ui()
-
         self.output_format = "string"
         self.update_ports()
 
     def setup_combo_boxes(self): 
-
         self.comboBox_3.hide()
         self.comboBox_4.hide()
         self.comboBox_5.hide()
@@ -74,22 +73,11 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         self.imageLabel.setPixmap(pixmap)  # Use the QPixmap created from base64
         self.imageLabel.setScaledContents(True)
         self.imageLabel.setObjectName("imageLabel")
-
-        self.comboBox_19.addItems([str(i) for i in range(1, 1001)])
         self.comboBox_3.addItems(["String", "Hex"]) 
         self.comboBox_4.addItems(self.data_bits_mapping.keys())
         self.comboBox_5.addItems(self.parity_mapping.keys())
         self.comboBox_6.addItems(self.stop_bits_mapping.keys())
         self.comboBox_7.addItems(["String","Hex","Chart"])
-        self.comboBox_8.addItems(["Yes","No"])
-        self.comboBox_9.addItems([""])  # sleep time dropdown
-        self.comboBox_10.addItems(["RTD","TC-K type","TC-J type","TC-N type","TC-T type","TC-S type","TC-R type","TC-E type"])      #sensor type
-        self.comboBox_11.addItems([str(i) for i in range(1, 1001)])
-        self.comboBox_12.addItems([str(i) for i in range(1, 1001)])
-        self.comboBox_13.addItems([str(i) for i in range(1, 22)])
-        self.comboBox_14.addItems([""])     # temperature dropdown
-        self.comboBox_18.addItems(["PT100","PT1000"])
-        self.comboBox_15.addItems(["1","2","3","4"])
 
         self.comboBox_3.currentIndexChanged.connect(self.change_format_mode)
         self.comboBox_7.currentIndexChanged.connect(self.change_output_format)
@@ -120,17 +108,12 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
 
     def setup_additional_ui(self):
         self.pushButton_command = QPushButton(self.centralwidget)
-        self.pushButton_command.setGeometry(QtCore.QRect(630, 213, 151, 32))
+        self.pushButton_command.setGeometry(QtCore.QRect(760, 213, 151, 32))
         self.pushButton_command.setObjectName("pushButton_command")
         self.pushButton_command.setText("Get Params")
         self.device_id = None
         self.version = None
 
-        # Connect combo boxes to the conversion function  
-        self.comboBox_11.currentIndexChanged.connect(self.convert_to_hex)  
-        self.comboBox_12.currentIndexChanged.connect(self.convert_to_hex)
-        self.comboBox_19.currentIndexChanged.connect(self.convert_to_hex)
-        
         # Combine the styles into a single setStyleSheet call
         self.pushButton_command.setStyleSheet("""
             border: 2px solid #4CAF50;
@@ -144,25 +127,6 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         """)
         
         self.pushButton_command.clicked.connect(self.set_default_values_and_send_command)
-
-    def convert_to_hex(self):  
-        # Get the selected values from the combo boxes  
-        value_11 = self.comboBox_11.currentText()  
-        value_12 = self.comboBox_12.currentText()  
-        value_19 = self.comboBox_19.currentText()  
-
-        # Convert to hex if the values are not empty  
-        if value_11.isdigit():  
-            hex_value_11 = hex(int(value_11))[2:].upper().zfill(4)  # Convert to hex, remove '0x', and pad to 4 digits  
-            print(f"Hex Value 11: {hex_value_11}")  # Print to terminal  
-
-        if value_12.isdigit():  
-            hex_value_12 = hex(int(value_12))[2:].upper().zfill(4)  # Convert to hex, remove '0x', and pad to 4 digits  
-            print(f"Hex Value 12: {hex_value_12}")  # Print to terminal  
-
-        if value_19.isdigit():  
-            hex_value_19 = hex(int(value_19))[2:].upper().zfill(4)  # Convert to hex, remove '0x', and pad to 4 digits  
-            print(f"Hex Value 19: {hex_value_19}")  # Print to terminal  
 
     def set_default_values_and_send_command(self):
         print("Setting default values and sending command")
@@ -196,7 +160,7 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
         self.append_n = state == QtCore.Qt.Checked
 
     def update_baud_rates(self): #function to select baud rates
-        baud_rates = ["9600"]  # Add more if needed
+        baud_rates = ["115200"]  # Add more if needed
         self.comboBox_2.addItems(baud_rates)
 
     def disconnect_serial(self):  
@@ -261,6 +225,12 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
             self.textEdit_2.append(f"Error: {str(e)}")  
             print(f"Error: {str(e)}")  
 
+    def handle_push_button_click(self):  
+        # First, call the method to set default values and send the command  
+        self.set_default_values_and_send_command()  
+        # Then, call the method to connect the serial port  
+        self.connect_serial()  
+
     def refresh_ports(self):  
         """Refreshes the list of available COM ports."""  
         print("Refreshing ports")  
@@ -294,6 +264,328 @@ class SerialMonitorApp(QMainWindow, Ui_MainWindow):
             self.output_format = "hex"
         elif selected_index == 2:
             self.output_format = "chart"
+
+    def send_command(self):  
+        if self.serial_port and self.serial_port.is_open:  
+            self.serial_port.reset_input_buffer()  
+            self.serial_port.read_all()  
+
+            # Define both commands
+            commands = [("a1a1a1", "Data Command")]
+
+            for command_hex, command_name in commands:
+                # Convert the command to bytes
+                command_bytes = bytes.fromhex(command_hex)
+
+                # Add carriage return if required
+                if self.append_r:
+                    command_bytes += bytes([0x0D])
+
+                # Add newline if required
+                if self.append_n:
+                    command_bytes += bytes([0x0A])
+
+                # Write the command to the serial port
+                self.serial_port.write(command_bytes)
+                print(f"Sent {command_name}: {command_bytes.hex()}")
+                time.sleep(0.1)
+
+                # Read the response from the serial port
+                response = self.serial_port.read_all()
+                print(f"Raw response from {command_name}: {response.hex()}")
+
+                if response:
+                    # Format the response based on output format
+                    if self.output_format == "hex":
+                        response_text = ' '.join(format(byte, "02X") for byte in response)
+                        binary_response = ''.join(format(byte, '08b') for byte in response)
+                    elif self.output_format == "chart":
+                        response_text = ""
+                        for byte in response:
+                            if 32 <= byte <= 126:
+                                response_text += chr(byte)
+                            else:
+                                response_text += '.'
+                        binary_response = ''.join(format(byte, '08b') for byte in response)
+                    else:
+                        response_text = response.decode("utf-8")
+                        binary_response = ''.join(format(byte, '08b') for byte in response)
+
+                # Clear the textEdit_2 widget before appending the new response  
+                self.textEdit_2.clear()  
+                self.textEdit_2.append(f"Received params: {response_text}")
+                print("response text",response_text)
+                print(f"Checking alert condition:response_text={response_text.strip()}")    
+                if len(response) >= 7: 
+                    value_1 = int.from_bytes(response[0:2], byteorder='big')  
+                    self.comboBox_19.setCurrentText(str(value_1))  
+ 
+                    value_2 = int.from_bytes(response[2:4], byteorder='big')  
+                    self.comboBox_12.setCurrentText(str(value_2))  
+  
+                    value_3 = int.from_bytes(response[4:6], byteorder='big')  
+                    self.comboBox_11.setCurrentText(str(value_3))  
+
+                    if len(response) >= 7:
+                        byte_4 = response[6] 
+                        print("byte 4",byte_4)
+                        binary_value = format(byte_4, '08b') 
+                        print(f"Binary value of byte 23: {binary_value}")  
+
+                        sensor_type_bits = binary_value[2:5]  
+                        if sensor_type_bits == "000":  
+                            self.comboBox_10.setCurrentText("RTD")  
+                        elif sensor_type_bits == "001":  
+                            self.comboBox_10.setCurrentText("TC-K type")  
+                        elif sensor_type_bits == "010":  
+                            self.comboBox_10.setCurrentText("TC-J type")  
+                        elif sensor_type_bits == "011":  
+                            self.comboBox_10.setCurrentText("TC-N type")  
+                        elif sensor_type_bits == "100":  
+                            self.comboBox_10.setCurrentText("TC-T type")  
+                        elif sensor_type_bits == "101":  
+                            self.comboBox_10.setCurrentText("TC-S type")  
+                        elif sensor_type_bits == "110":  
+                            self.comboBox_10.setCurrentText("TC-R type")  
+                        elif sensor_type_bits == "111":  
+                            self.comboBox_10.setCurrentText("TC-E type")  
+ 
+                        if binary_value[5] == '1':  
+                            self.comboBox_18.setCurrentText("PT1000")  
+                        else:  
+                            self.comboBox_18.setCurrentText("PT100")  
+
+                        bits_6_7 = binary_value[6:8]  
+                        if bits_6_7 == "00":  
+                            self.comboBox_15.setCurrentText("1")  
+                        elif bits_6_7 == "01":  
+                            self.comboBox_15.setCurrentText("2")  
+                        elif bits_6_7 == "10":  
+                            self.comboBox_15.setCurrentText("3")  
+                        elif bits_6_7 == "11":  
+                            self.comboBox_15.setCurrentText("4")
+                if len(response) >= 8: 
+                    byte_8 = response[7] 
+                    binary_byte_8 = format(byte_8, '08b')
+                    print(f"Binary value of the 8th byte: {binary_byte_8}")
+
+                    bits_2_6 = binary_byte_8[2:7]  
+                    decimal_value = int(bits_2_6, 2) 
+                    self.comboBox_13.setCurrentText(str(decimal_value))  
+                    print(f"Bits 2-6 of the 8th byte: {bits_2_6}, updated comboBox_13 to {decimal_value}")  
+ 
+                    last_bit = binary_byte_8[-1]
+                    if last_bit == '0':  
+                        self.comboBox_8.setCurrentText("No")  
+                    elif last_bit == '1':  
+                        self.comboBox_8.setCurrentText("Yes")  
+                    print(f"Last bit of the 8th byte: {last_bit}, updated comboBox_8 to {'Yes' if last_bit == '1' else 'No'}")  
+
+                if len(response) >= 12:  
+                    byte_9 = response[8] 
+                    byte_10 = response[9]   
+                    byte_11 = response[10] 
+                    byte_12 = response[11] 
+
+                    decimal_value_9_12 = (byte_9 << 24) + (byte_10 << 16) + (byte_11 << 8) + byte_12  
+                    self.lineEdit_9.setText(str(decimal_value_9_12)) 
+                    print(f"9th byte: {byte_9}, 10th byte: {byte_10}, 11th byte: {byte_11}, 12th byte: {byte_12}, combined decimal value: {decimal_value_9_12}")
+
+                if len(response) >= 16:  
+                    byte_13 = response[12] 
+                    byte_14 = response[13] 
+                    byte_15 = response[14] 
+                    byte_16 = response[15] 
+
+                    byte_array = bytes([byte_13, byte_14, byte_15, byte_16])  
+
+                    float_value = struct.unpack('<f', byte_array)[0]   
+                    
+
+                    formatted_float_value = f"{float_value:.2f}"  
+                    self.lineEdit_14.setText(formatted_float_value) 
+                    print(f"13th byte: {byte_13}, 14th byte: {byte_14}, 15th byte: {byte_15}, 16th byte: {byte_16}, float value: {formatted_float_value}")  
+        else:
+            # Clear textEdit_2 and display connection error
+            self.textEdit_2.clear()
+            self.textEdit_2.append("Not connected to a serial port.")
+
+    def convert_values(self):
+        print("Converting values")
+        
+        # Check if all fields are filled
+        if (self.comboBox_19.currentText() == "" or
+            self.comboBox_12.currentText() == "" or
+            self.comboBox_11.currentText() == "" or
+            self.comboBox_10.currentText() == "" or
+            self.comboBox_18.currentText() == "" or
+            self.comboBox_15.currentText() == "" or
+            self.comboBox_13.currentText() == "" or
+            self.comboBox_8.currentText() == "" or
+            self.lineEdit_9.text() == "" or  # Text input instead of comboBox
+            self.lineEdit_14.text() == ""):
+            
+            QtWidgets.QMessageBox.warning(self, "Input Error", "Please fill all fields before converting.")
+            return
+
+        # Retrieve values
+        value_19 = self.comboBox_19.currentText()
+        value_12 = self.comboBox_12.currentText()
+        value_11 = self.comboBox_11.currentText()
+        selected_type = self.comboBox_10.currentText()
+        selected_pt_type = self.comboBox_18.currentText()
+        selected_combo_15 = self.comboBox_15.currentText()
+        selected_combo_13 = self.comboBox_13.currentText()
+        selected_combo_8 = self.comboBox_8.currentText()
+        sleep_time_input = self.lineEdit_9.text()
+        temperature_input = self.lineEdit_14.text()
+
+        selected_sensor_type = ""
+        if selected_type == "RTD":
+            selected_sensor_type = "000"
+        elif selected_type == "TC-K type":
+            selected_sensor_type = "001"
+        elif selected_type == "TC-J type":
+            selected_sensor_type = "010"
+        elif selected_type == "TC-N type":
+            selected_sensor_type = "011"
+        elif selected_type == "TC-T type":
+            selected_sensor_type = "100"
+        elif selected_type == "TC-S type":
+            selected_sensor_type = "101"
+        elif selected_type == "TC-R type":
+            selected_sensor_type = "110"
+        elif selected_type == "TC-E type":
+            selected_sensor_type = "111"
+
+        # Helper function to convert to hexadecimal
+        def convert_to_hex(value):
+            try:
+                int_value = int(value)
+                if 0 <= int_value <= 1000:
+                    return hex(int_value)[2:].upper().zfill(4)
+                return "N/A"
+            except ValueError:
+                return "N/A"
+
+        # Convert values to hex
+        hex_value_11 = convert_to_hex(value_11)
+        hex_value_12 = convert_to_hex(value_12)
+        hex_value_19 = convert_to_hex(value_19)
+
+        # # Mappings
+        binary_mapping = "00" + selected_sensor_type
+        pt_binary_mapping = {"PT100": "0", "PT1000": "1"}
+        combo_15_mapping = {"1": "00", "2": "01", "3": "10", "4": "11"}
+
+        # binary_value = "00" + binary_mapping.get(selected_type, "000")
+        pt_binary_value = pt_binary_mapping.get(selected_pt_type, "0")
+        combo_15_binary_value = combo_15_mapping.get(selected_combo_15, "N/A")
+
+        command = f"{binary_mapping}{pt_binary_value}{combo_15_binary_value}"
+
+        if len(command) == 8:    
+            first_half_hex = hex(int(command[:4], 2))[2:] 
+            second_half_hex = hex(int(command[4:], 2))[2:]  
+            first_half_hex = first_half_hex.zfill(1)  
+            second_half_hex = second_half_hex.zfill(1)  
+            new_command = first_half_hex + second_half_hex
+            print(first_half_hex, second_half_hex)
+        else:  
+            print("Command must be 8 bits long.")  
+
+        if selected_combo_13.isdigit():
+            combo_13_value = int(selected_combo_13)
+            if 1 <= combo_13_value <= 16:
+                combo_13_binary_value = "000" + format(combo_13_value, '04b')
+            elif 17 <= combo_13_value <= 22:
+                combo_13_binary_value = "00" + format(combo_13_value, '05b')
+            elif combo_13_value == 0:
+                combo_13_binary_value = "0000"
+            else:
+                combo_13_binary_value = "N/A"
+        else:
+            combo_13_binary_value = "N/A"
+
+        combo_8_binary_value = "1" if selected_combo_8 == "Yes" else "0"
+
+        second_command = f"{combo_13_binary_value}{combo_8_binary_value}"
+        if len(second_command) == 8:
+            # Convert first 4 bits to hex
+            first_half_hex1 = hex(int(second_command[:4], 2))[2:]  # Convert
+            # to hex and remove '0x'
+            second_half_hex1 = hex(int(second_command[4:], 2))[2:]  # Convert to hex and remove '0x'  
+            
+            # Ensure each hex value is 1 character long (pad with '0' if necessary)  
+            first_half_hex1 = first_half_hex1.zfill(1)  
+            second_half_hex1 = second_half_hex1.zfill(1) 
+            second_new_command = first_half_hex1 + second_half_hex1
+
+        try:
+            sleep_time_hex = format(int(sleep_time_input), '08X')
+        except ValueError:
+            sleep_time_hex = "N/A"
+
+        try:
+            temperature_hex = ''.join(format(byte, '02X') for byte in struct.pack('f', float(temperature_input))).zfill(8)
+        except ValueError:
+            temperature_hex = "N/A"
+        
+        combined_command1 = f"{hex_value_19} {hex_value_12} {hex_value_11} {new_command} {second_new_command} {sleep_time_hex} {temperature_hex}"
+
+        # Ensure each value is 8 characters long and split into spaced groups of 2
+        formatted_hex_11 = " ".join([hex_value_11[i:i+2] for i in range(0, len(hex_value_11), 2)])
+        formatted_hex_12 = " ".join([hex_value_12[i:i+2] for i in range(0, len(hex_value_12), 2)])
+        formatted_hex_19 = " ".join([hex_value_19[i:i+2] for i in range(0, len(hex_value_19), 2)])
+        formatted_sleep_time = " ".join([sleep_time_hex[i:i+2] for i in range(0,len(sleep_time_hex), 2)])
+        formatted_temperature_hex = " ".join([temperature_hex[i:i+2] for i in range(0,len(temperature_hex), 2)])
+
+        combined_command = f"{formatted_hex_19} {formatted_hex_12} {formatted_hex_11} {new_command} {second_new_command} {formatted_sleep_time} {formatted_temperature_hex}"
+
+
+        def compute_crc8(data, polynomial=0x07, initial_value=0x00):
+            crc = initial_value
+            for byte in data:
+                crc ^= byte
+                for _ in range(8):  # Process each bit
+                    if crc & 0x80:  # Check the MSB
+                        crc = (crc << 1) ^ polynomial
+                    else:
+                        crc <<= 1
+                    crc &= 0xFF  # Ensure CRC is 8-bit
+            return crc
+        command_bytes = combined_command.split()
+        if len(command_bytes) < 16:
+            # Pad with "00" if less than 16 bytes
+            command_bytes += ["00"] * (16 - len(command_bytes))
+        elif len(command_bytes) > 16:
+            # Truncate if more than 16 bytes
+            command_bytes = command_bytes[:16]
+
+        # Compute CRC for the first 16 bytes
+        command_bytes_int = [int(byte, 16) for byte in command_bytes]  # Convert to integers
+        crc8 = compute_crc8(command_bytes_int)
+
+        # Append the CRC as the 17th byte
+        command_bytes.append(f"{crc8:02X}")  # Format CRC as two-digit hex
+
+        # Reformat as a space-separated string
+        combined_command = " ".join(command_bytes)
+        print(f"Combined Command (17 bytes): {combined_command}")
+        self.textEdit_2.clear()
+        self.textEdit_2.append(f"Params: {combined_command}")
+
+        if self.serial_port and self.serial_port.is_open:
+            try:
+                command_bytes = bytes.fromhex(combined_command.replace(' ', ''))
+                self.serial_port.write(command_bytes)
+                print(f"Sent command: {command_bytes.hex()}")
+            except Exception as e:
+                print(f"Error sending command: {str(e)}")
+                self.textEdit_2.append(f"Error sending command: {str(e)}")
+        else:
+            print("Serial port not open, unable to send command")
+            self.textEdit_2.append("Serial port not open, unable to send command")
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

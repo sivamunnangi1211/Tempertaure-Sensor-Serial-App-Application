@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QDoubleValidator
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -96,7 +97,7 @@ class Ui_MainWindow(object):
         self.label_20.setStyleSheet(common_style)
 
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)  # port selection
-        self.comboBox.setGeometry(QtCore.QRect(410, 140, 200, 40))
+        self.comboBox.setGeometry(QtCore.QRect(520, 140, 200, 40))
         self.comboBox.setObjectName("comboBox")
         
         # Set styles to make the ComboBox more appealing
@@ -162,6 +163,33 @@ class Ui_MainWindow(object):
             
         """
 
+        common_lineedit_style = """
+            QLineEdit {
+                color: #2C3E50;                /* Text color */
+                font-size: 14px;               /* Font size */
+                font-weight: bold;             /* Font weight */
+                background-color: #ECF0F1;     /* Background color */
+                border: 2px solid #4CAF50;     /* Border color */
+                padding: 5px;                  /* Padding */
+                border-radius: 8px;            /* Rounded corners */
+                min-height: 30px;              /* Minimum height */
+            }
+            QLineEdit:hover {
+                background-color: #D5DBDB;     /* Background color on hover */
+                border: 2px solid #AAB7B8;     /* Border color on hover */
+            }
+            QLineEdit:focus {
+                background-color: #FDFEFE;     /* Background color on focus */
+                border: 2px solid #5DADE2;     /* Border color on focus */
+            }
+            QLineEdit:disabled {
+                background-color: #E5E8E8;     /* Background color when disabled */
+                color: #AAB7B8;                /* Text color when disabled */
+                border: 2px solid #BDC3C7;     /* Border when disabled */
+            }
+"""
+
+
         common_button_style = """
             QPushButton {
                 background-color: transparent;
@@ -176,49 +204,41 @@ class Ui_MainWindow(object):
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)   
         self.comboBox_2.setGeometry(QtCore.QRect(0,0,0,0))    #9600 values dropdown
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.setEditable(True)
         self.comboBox_2.setStyleSheet(common_combobox_style)
         self.comboBox_3 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_3.setGeometry(QtCore.QRect(0,0,0,0))    #String or Hex dropdown
         self.comboBox_3.setObjectName("comboBox_3")
-        self.comboBox_3.setEditable(True)
         self.comboBox_3.setStyleSheet(common_combobox_style)
         self.comboBox_4 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_4.setGeometry(QtCore.QRect(0,0,0,0))   # 5,8 values dropdown
         self.comboBox_4.setObjectName("comboBox_4")
-        self.comboBox_4.setEditable(True)
         self.comboBox_4.setStyleSheet(common_combobox_style)
         self.comboBox_5 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_5.setGeometry(QtCore.QRect(0,0,0,0))   # no parity,event parity dropdown
         self.comboBox_5.setObjectName("comboBox_5")
-        self.comboBox_5.setEditable(True)
         self.comboBox_5.setStyleSheet(common_combobox_style)
         self.comboBox_6 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_6.setGeometry(QtCore.QRect(0,0,0,0))   #1,1.5,2 values dropdown
         self.comboBox_6.setObjectName("comboBox_6")
-        self.comboBox_6.setEditable(True)
         self.comboBox_6.setStyleSheet(common_combobox_style)
         self.comboBox_7 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_7.setGeometry(QtCore.QRect(0,0,0,0))   # hex,string,chart dropdown
         self.comboBox_7.setObjectName("comboBox_7")
-        self.comboBox_7.setEditable(True)
         self.comboBox_7.setStyleSheet(common_combobox_style)
         self.comboBox_8 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_8.setGeometry(QtCore.QRect(470, 430, 150, 32))   #250ms values dropdown
         self.comboBox_8.setObjectName("comboBox_8")
-        self.comboBox_8.setEditable(True)
         # self.infoButton_8 = self.create_info_button(630, 430, "infoButton_8", common_button_style)
         self.comboBox_8.setStyleSheet(common_combobox_style)
-        self.comboBox_9 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_9.setGeometry(QtCore.QRect(470, 270, 150, 32))    #FEC dropdown
-        self.comboBox_9.setObjectName("comboBox_9")
-        self.comboBox_9.setEditable(True)
+        self.lineEdit_9 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_9.setGeometry(QtCore.QRect(470, 270, 150, 32))  # FEC text box
+        self.lineEdit_9.setObjectName("lineEdit_9")
+        self.lineEdit_9.setStyleSheet(common_lineedit_style)
         self.infoButton_9 = self.create_info_button(630, 270, "infoButton_9", common_button_style)
-        self.comboBox_9.setStyleSheet(common_combobox_style)
+        # self.comboBox_9.setStyleSheet(common_combobox_style)
         self.comboBox_10 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_10.setGeometry(QtCore.QRect(130, 510, 150, 32))    #20dBm dropdown
         self.comboBox_10.setObjectName("comboBox_10")
-        self.comboBox_10.setEditable(True)
         # self.infoButton_10 = self.create_info_button(290, 510, "infoButton_10", common_button_style)
         self.comboBox_10.setStyleSheet(common_combobox_style)
         self.comboBox_11 = QtWidgets.QComboBox(self.centralwidget)
@@ -236,25 +256,27 @@ class Ui_MainWindow(object):
         self.comboBox_13 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_13.setGeometry(QtCore.QRect(470, 350, 150, 32))    #Transmit Power dropdown
         self.comboBox_13.setObjectName("comboBox_13")
-        self.comboBox_13.setEditable(True)
         self.infoButton_13 = self.create_info_button(630, 350, "infoButton_13", common_button_style) 
         self.comboBox_13.setStyleSheet(common_combobox_style)
-        self.comboBox_14 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_14.setGeometry(QtCore.QRect(470, 510, 150, 32))    #Temperature Drodown
-        self.comboBox_14.setObjectName("comboBox_14")
-        self.comboBox_14.setEditable(True)
+        # Replace QComboBox with QLineEdit
+        self.lineEdit_14 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_14.setGeometry(QtCore.QRect(470, 510, 150, 32))  # Temperature Text Box
+        self.lineEdit_14.setObjectName("lineEdit_14")
+        self.lineEdit_14.setStyleSheet(common_lineedit_style)  # Apply the previously defined QLineEdit style
+        validator = QDoubleValidator()
+        validator.setNotation(QDoubleValidator.StandardNotation)  # Standard float notation
+        validator.setDecimals(2)  # Limit to 2 decimal places
+        validator.setBottom(0.0)  # Set minimum value (e.g., 0.0)
+        self.lineEdit_14.setValidator(validator)
         self.infoButton_14 = self.create_info_button(630, 510, "infoButton_14", common_button_style)
-        self.comboBox_14.setStyleSheet(common_combobox_style)
         self.comboBox_15 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_15.setGeometry(QtCore.QRect(770, 350, 150, 32))   #No of Wires Dropdown
         self.comboBox_15.setObjectName("comboBox_15")
-        self.comboBox_15.setEditable(True)  # Allow text entry
         self.infoButton_15 = self.create_info_button(930, 350, "infoButton_15", common_button_style)
         self.comboBox_15.setStyleSheet(common_combobox_style)
         self.comboBox_18 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_18.setGeometry(QtCore.QRect(770,270,150,32))   #PT Dropdown
         self.comboBox_18.setObjectName("comboBox_18")
-        self.comboBox_18.setEditable(True)
         # self.infoButton_18 = self.create_info_button(930, 270, "infoButton_18", common_button_style)
         self.comboBox_18.setStyleSheet(common_combobox_style)
         self.comboBox_19 = QtWidgets.QComboBox(self.centralwidget)
@@ -263,6 +285,15 @@ class Ui_MainWindow(object):
         self.comboBox_19.setEditable(True)
         # self.infoButton_19 = self.create_info_button(290, 270, "infoButton_19", common_button_style)
         self.comboBox_19.setStyleSheet(common_combobox_style)
+        self.comboBox_19.addItems([str(i) for i in range(1, 1001)]) #Network ID
+        self.comboBox_8.addItems(["Yes","No"])  # sleep time dropdown
+        self.comboBox_10.addItems(["RTD","TC-K type","TC-J type","TC-N type","TC-T type","TC-S type","TC-R type","TC-E type"])      #sensor type
+        self.comboBox_11.addItems([str(i) for i in range(1, 1001)])   #Destination ID
+        self.comboBox_12.addItems([str(i) for i in range(1, 1001)])   #Unique ID
+        self.comboBox_13.addItems([str(i) for i in range(1, 23)])
+        self.comboBox_18.addItems(["PT100","PT1000"])
+        self.comboBox_15.addItems(["1","2","3","4"])
+
 
  # Call the method to populate dropdowns
 
@@ -289,29 +320,29 @@ class Ui_MainWindow(object):
         # Create buttons
         self.pushButton = QtWidgets.QPushButton("Connect", self.centralwidget)
         self.pushButton.setStyleSheet(button_style)
-        self.pushButton.setGeometry(QtCore.QRect(630, 130, 151, 32))  # Button at (590, 130), Size (81, 32)
+        self.pushButton.setGeometry(QtCore.QRect(760, 130, 151, 32))  
         self.pushButton_2 = QtWidgets.QPushButton("Refresh Port", self.centralwidget)
         self.pushButton_2.setStyleSheet(button_style)
-        self.pushButton_2.setGeometry(QtCore.QRect(790, 170, 151, 32))  # Button at (690, 170), Size (81, 32)
+        self.pushButton_2.setGeometry(QtCore.QRect(910, 170, 151, 32))
         self.pushButton_3 = QtWidgets.QPushButton("Clear", self.centralwidget)
         self.pushButton_3.setStyleSheet(button_style)
-        self.pushButton_3.setGeometry(QtCore.QRect(450, 200, 151, 40))  # Button at (620, 213), Size (81, 32)
+        self.pushButton_3.setGeometry(QtCore.QRect(560, 200, 151, 40))
         self.pushButton_4 = QtWidgets.QPushButton("Disconnect", self.centralwidget)
         self.pushButton_4.setStyleSheet(button_style)
-        self.pushButton_4.setGeometry(QtCore.QRect(630, 170, 151, 32))  # Button at (590, 170), Size (81, 32)
+        self.pushButton_4.setGeometry(QtCore.QRect(760, 170, 151, 32))  # Button at (590, 170), Size (81, 32)
         self.pushButton_5 = QtWidgets.QPushButton("Set Params", self.centralwidget)
         self.pushButton_5.setStyleSheet(button_style)
-        self.pushButton_5.setGeometry(QtCore.QRect(790, 213, 151, 32))  # Button at (520, 213), Size (81, 32)
+        self.pushButton_5.setGeometry(QtCore.QRect(910, 213, 151, 32))  # Button at (520, 213), Size (81, 32)
         self.pushButton_6 = QtWidgets.QPushButton("Version", self.centralwidget)
         self.pushButton_6.setStyleSheet(button_style)
-        self.pushButton_6.setGeometry(QtCore.QRect(790, 130, 151, 32))  # Button at (690, 130), Size (81, 32)
-        self.pushButton_7 = QtWidgets.QPushButton("Test", self.centralwidget)
-        self.pushButton_7.setStyleSheet(button_style)
-        self.pushButton_7.setGeometry(QtCore.QRect(790, 50, 151, 32))   #300, 50, 800, 30
+        self.pushButton_6.setGeometry(QtCore.QRect(910, 130, 151, 32))  # Button at (690, 130), Size (81, 32)
+        # self.pushButton_7 = QtWidgets.QPushButton("Test", self.centralwidget)
+        # self.pushButton_7.setStyleSheet(button_style)
+        # self.pushButton_7.setGeometry(QtCore.QRect(790, 50, 151, 32))   #300, 50, 800, 30
 
         # Set window title and dimensions
         self.setWindowTitle("Controlytics.AI")
-        self.setGeometry(400, 200, 960, 600)  # Set the window position and size (left, top, width, height)
+        self.setGeometry(400, 200, 1060, 600)  # Set the window position and size (left, top, width, height)
 
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox.setGeometry(QtCore.QRect(350, 300, 111, 17))
@@ -324,8 +355,9 @@ class Ui_MainWindow(object):
         # self.textEdit.setGeometry(QtCore.QRect(490, 220, 185, 25)) #command box
         # self.textEdit.setObjectName("textEdit")
         self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_2.setGeometry(QtCore.QRect(30, 140, 350, 101))  # response box
+        self.textEdit_2.setGeometry(QtCore.QRect(30, 140, 470, 101))  # response box
         self.textEdit_2.setObjectName("textEdit_2")
+        self.textEdit_2.setReadOnly(True)
 
 
         self.info_map = {
@@ -418,13 +450,13 @@ class Ui_MainWindow(object):
         # self.label_8.setText(_translate("MainWindow", "Stop Bits: "))
         # self.label_9.setText(_translate("MainWindow", "View as: "))
         self.label_10.setText(_translate("MainWindow", "Transmit Power"))
-        self.label_11.setText(_translate("MainWindow", "Temperature Threshold"))
+        self.label_11.setText(_translate("MainWindow", " Temperature Threshold"))
         self.label_12.setText(_translate("MainWindow", "Transmit On Change"))
         self.label_13.setText(_translate("MainWindow", "Sleep Time"))
         self.label_14.setText(_translate("MainWindow", "Sensor Type"))
         self.label_15.setText(_translate("MainWindow", "Unique ID(UID)"))
         self.label_16.setText(_translate("MainWindow", "Destination ID(DID)"))
-        self.label_18.setText(_translate("MainWindow", "No Of Wires"))
+        self.label_18.setText(_translate("MainWindow", "No.s Wires"))
         self.label_20.setText(_translate("MainWindow", "PT"))
         self.pushButton.setText(_translate("MainWindow", "Connect"))
         self.pushButton_2.setText(_translate("MainWindow", "Refresh Ports"))
